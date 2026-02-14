@@ -1,0 +1,40 @@
+databases:
+  - name: movielens-db
+    databaseName: movielens
+    user: postgres
+
+services:
+  - type: web
+    name: movie-backend
+    env: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -b 0.0.0.0:5000 app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: movielens-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.9.0
+
+  - type: web
+    name: movie-frontend
+    env: node
+    region: oregon
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_TMDB_API_KEY
+        value: 259ce8e6ef8a88ab367725c097372b3e
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: movie-backend
+          envVarKey: RENDER_EXTERNAL_URL
+        # Note: We need to append /api in the code
+        # But wait, create-react-app / vite bakes env vars at build time.
+        # The URL is known at creation time usually.
+        # However, Render's static sites handle this via build command context.
