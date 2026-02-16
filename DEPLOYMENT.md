@@ -20,8 +20,30 @@ This guide explains how to deploy your Movie Recommendation System using free ti
     -   Replace `[password]` with your actual DB password.
 5.  **Save this URL**, you will need it for the Render Backend.
 
+
 ---
 
+## 2️⃣ Backend Deployment (Render)
+1.  Go to [Render.com](https://render.com) and create a **New Web Service**.
+2.  Connect your GitHub repo.
+3.  **Settings**:
+    -   **Root Directory**: `backend`
+    -   **Runtime**: Python 3
+    -   **Build Command**: `pip install -r requirements.txt`
+    -   **Start Command**: `gunicorn app:app`
+4.  **Environment Variables** (Add these):
+    -   `PYTHON_VERSION`: `3.9.0` (or `3.10.0`)
+    -   `DATABASE_URL`: *(Paste your Supabase Connection String from Step 1)*
+    -   `TMDB_API_KEY`: Your TMDB API Key (See `0d39...`)
+    -   `SECRET_KEY`: *(Generate a random string)*
+    -   `FRONTEND_URL`: *(Your Vercel URL, set this after deploying frontend)*
+5.  Click **Deploy Web Service**.
+6.  Once deployed, **copy the Backend URL** (e.g., `https://movie-backend.onrender.com`).
+
+---
+
+## 3️⃣ Frontend Deployment (Vercel)
+1.  Go to [Vercel.com](https://vercel.com) and **Add New Project**.
 2.  Import your GitHub repo.
 3.  **Project Settings**:
     -   **Framework Preset**: Vite
