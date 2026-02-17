@@ -63,6 +63,15 @@ After deployment, the database will be empty. To fill it:
     ```bash
     python load_data.py
     ```
-    *(This may take a few minutes)*
+4.  **Train the Model**:
+    The model needs to be trained on the server to generate `model.pkl`.
+    Run in the same Shell:
+    ```bash
+    python backend/train_model.py
+    ```
+    *(This will read from the database and save `model.pkl`)*
+
+5.  **Restart Service**:
+    Go to the main dashboard for your service and click **Manual Deploy** -> **Clear Build Cache & Deploy** or just **Restart Service** to ensure the new model is loaded (though `app.py` might pick it up on next worker boot).
 
 ✅ **Done!** Your full-stack app is now live for free.
